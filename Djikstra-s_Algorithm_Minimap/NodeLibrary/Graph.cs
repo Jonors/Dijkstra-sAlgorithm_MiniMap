@@ -1,11 +1,13 @@
-namespace DataStructureLibrary.Graph;
+using System;
+
+namespace Djikstra_s_Algorithm_Minimap.Graph;
 
 public class Graph<TVertexProperty, TEdgeProperty>
-where TVertexProperty : BasicVertexProperty, new()
-where TEdgeProperty : BasicEdgeProperty<Vertex<TVertexProperty>>, new()
+    where TVertexProperty : BasicVertexProperty, new()
+    where TEdgeProperty : BasicEdgeProperty<Vertex<TVertexProperty>>, new()
 {
     // Fields
-    // In a field declaration, readonly means you can only assign the field during the declaration or in a constructor in the same class. 
+    // In a field declaration, readonly means you can only assign the field during the declaration or in a constructor in the same class.
     private readonly LinkedList<Vertex<TVertexProperty>> _vertices;
     private readonly LinkedList<Edge<Vertex<TVertexProperty>, TEdgeProperty>> _edges;
 
@@ -70,12 +72,17 @@ where TEdgeProperty : BasicEdgeProperty<Vertex<TVertexProperty>>, new()
     }
 
     // Edge
-    public Edge<Vertex<TVertexProperty>, TEdgeProperty>? AddEdge(Vertex<TVertexProperty>? source, Vertex<TVertexProperty>? target)
+    public Edge<Vertex<TVertexProperty>, TEdgeProperty>? AddEdge(
+        Vertex<TVertexProperty>? source,
+        Vertex<TVertexProperty>? target
+    )
     {
         // Check if the source and target vertices exist
         if (source == null || target == null)
         {
-            Console.WriteLine("Source or Target Vertex<TVertexProperty>could not be found. Please add vertices first");
+            Console.WriteLine(
+                "Source or Target Vertex<TVertexProperty>could not be found. Please add vertices first"
+            );
             return null;
         }
 
@@ -85,7 +92,10 @@ where TEdgeProperty : BasicEdgeProperty<Vertex<TVertexProperty>>, new()
         // If not, add a new edge
         if (e == null)
         {
-            Edge<Vertex<TVertexProperty>, TEdgeProperty> newE = new Edge<Vertex<TVertexProperty>, TEdgeProperty>(source, target);
+            Edge<Vertex<TVertexProperty>, TEdgeProperty> newE = new Edge<
+                Vertex<TVertexProperty>,
+                TEdgeProperty
+            >(source, target);
             _edges.AddLast(newE);
             return newE;
         }
@@ -109,14 +119,17 @@ where TEdgeProperty : BasicEdgeProperty<Vertex<TVertexProperty>>, new()
         }
     }
 
-    public Edge<Vertex<TVertexProperty>, TEdgeProperty>? HasEdge(Vertex<TVertexProperty>? source, Vertex<TVertexProperty>? target)
+    public Edge<Vertex<TVertexProperty>, TEdgeProperty>? HasEdge(
+        Vertex<TVertexProperty>? source,
+        Vertex<TVertexProperty>? target
+    )
     {
-        if (source == null || target == null) return null;
+        if (source == null || target == null)
+            return null;
 
         foreach (Edge<Vertex<TVertexProperty>, TEdgeProperty> e in _edges)
         {
-            if ((e.Property.Source == source) &&
-                (e.Property.Target == target))
+            if ((e.Property.Source == source) && (e.Property.Target == target))
                 return e;
         }
 
