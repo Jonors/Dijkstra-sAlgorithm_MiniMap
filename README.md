@@ -21,3 +21,5 @@
 
 ## Contact
 ## Acknowledgments
+https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.linkedlist-1?view=net-10.0
+https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/generics

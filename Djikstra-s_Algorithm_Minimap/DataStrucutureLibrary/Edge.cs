@@ -4,13 +4,14 @@ public abstract class BasicEdgeProperty<TVertex>
 {
     // Fields
     public uint Id;
+
     // references
     public TVertex? Source;
     public TVertex? Target;
 }
 
 public class Edge<TVertex, TEdgeProperty>
-where TEdgeProperty : BasicEdgeProperty<TVertex>, new()
+    where TEdgeProperty : BasicEdgeProperty<TVertex>, new()
 {
     public TEdgeProperty Property;
     private static uint _idCounter = 0;

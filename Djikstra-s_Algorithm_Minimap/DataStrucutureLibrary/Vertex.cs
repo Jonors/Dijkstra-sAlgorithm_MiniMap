@@ -7,8 +7,8 @@ public abstract class BasicVertexProperty
     public string Name = "UnknownName";
 }
 
-
-public class Vertex<TVertexProperty> where TVertexProperty : BasicVertexProperty, new()
+public class Vertex<TVertexProperty>
+    where TVertexProperty : BasicVertexProperty, new()
 {
     public TVertexProperty Property;
     private static uint _idCounter = 0;

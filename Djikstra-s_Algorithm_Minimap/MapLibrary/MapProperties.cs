@@ -1,17 +1,19 @@
 using System;
-using Djikstra_s_Algorithm_Minimap.NodeLibrary.Graph;
+using Djikstra_s_Algorithm_Minimap.Graph;
 
 namespace MapLibrary.Core
 {
+    // Defining what a node (place or crossing) holds using the BasicerexProperty
     public class MapVertexProperty : BasicVertexProperty
     {
-        //define what a node(place or crossing) holds: position, Type, and depending on type a visual icon
+        //adding x and y so we have a position for the MapVertex
         public float X { get; set; }
         public float Y { get; set; }
 
+        //add a NodeType so we can lateron declare if the MapVeretx is either a clickable place or a road crossing
         public string NodeType { get; set; }
 
-        //if it is a place, it has an icon displaying a house
+        //Depending on the type the Nodes will be marked with a house or nothing
         public string IconPath { get; set; }
 
         public MapVertexProperty() { }
@@ -21,18 +23,22 @@ namespace MapLibrary.Core
             X = x;
             Y = y;
             NodeType = nodeType;
-            IconPath = iconPath;
+            // If it is a place, it has an icon displaying a house
+            IconPath =
+                nodeType == "Place" && string.IsNullOrEmpty(iconPath)
+                    ? "../assets/house.png"
+                    : iconPath;
         }
     }
 
-    //defining what an edge(road) holds: distance, connected to
-
-    public class MapEdgeProperty : BasicEdgeProperty<Vertex<MapEdgeProperty>>
+    // Defining what an edge (road) holds, inhertign from the basic EdgeProperty
+    public class MapEdgeProperty : BasicEdgeProperty<Vertex<MapVertexProperty>>
     {
         public float Distance { get; set; }
 
         public MapEdgeProperty() { }
 
+        //using the pythagorean theorem to calculate the distance between two points, giving us the distances needed for Djikstras Algorithm
         public void CalculateDistance()
         {
             if (Source != null && Target != null)

@@ -7,6 +7,7 @@ public class Node
     // fields
     // data
     public int Data;
+
     // referene
     public Node? Next;
 
@@ -52,9 +53,9 @@ public class SinglyLinkedList
     {
         Node? temp = _head;
 
-        if(temp != null)
+        if (temp != null)
         {
-            while(temp.Next != null)
+            while (temp.Next != null)
             {
                 temp = temp.Next;
             }
@@ -63,16 +64,10 @@ public class SinglyLinkedList
         return temp;
     }
 
-    public void InsertAfter(Node? prev, int newData)
-    {
-
-    }
+    public void InsertAfter(Node? prev, int newData) { }
 
     // delete elements
-    public void DeleteNodebyKey(int key)
-    {
-
-    }
+    public void DeleteNodebyKey(int key) { }
 
     // visit elements
     public void PrintList()
