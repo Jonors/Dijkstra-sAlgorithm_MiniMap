@@ -3,7 +3,9 @@ using System;
 namespace Djikstra_s_Algorithm_Minimap.Graph;
 
 public class Graph<TVertexProperty, TEdgeProperty>
+    //custom vertex TVertexProperty passed to this graph class must inherit BasicVertexProperty from Vertex.cs and have an empty constructor in case a new one needs to be created
     where TVertexProperty : BasicVertexProperty, new()
+    //custom edge TEdgeProperty must inherit BasicEdgeProperty which links two custom vertecies as Source and Target (defined in Edge.cs), so the edge knows where it starts and ends,  and have an empty constructor in case a new one needs to be created
     where TEdgeProperty : BasicEdgeProperty<Vertex<TVertexProperty>>, new()
 {
     // Fields
@@ -14,15 +16,16 @@ public class Graph<TVertexProperty, TEdgeProperty>
     // Constructors
     public Graph()
     {
+        // create new a new LinkedList for each of the 2 newly created variables where one is a list that holds all the vertecies/places we are about to create in the MapManager and one holds all the edge data inbetween those vertecies/places
         _vertices = new LinkedList<Vertex<TVertexProperty>>();
         _edges = new LinkedList<Edge<Vertex<TVertexProperty>, TEdgeProperty>>();
     }
 
-    // Methods
+    // Methods(CRUD)
     // Vertex
     public Vertex<TVertexProperty> AddVertex(string name)
     {
-        // check if the vertex exist
+        // check if the vertex exist so we dont create duplicates
         Vertex<TVertexProperty>? v = HasVertex(name);
 
         if (v == null)
@@ -46,6 +49,7 @@ public class Graph<TVertexProperty, TEdgeProperty>
         {
             for (int i = 0; i < _edges.Count; i++)
             {
+                //also remove the edges between the removed vertex and connected ones to have no loose ends.
                 Edge<Vertex<TVertexProperty>, TEdgeProperty> e = _edges.ElementAt(i);
 
                 if (e.Property.Source == v || e.Property.Target == v)
@@ -60,6 +64,7 @@ public class Graph<TVertexProperty, TEdgeProperty>
         }
     }
 
+//check if Vertex exists
     public Vertex<TVertexProperty>? HasVertex(string name)
     {
         foreach (Vertex<TVertexProperty> v in _vertices)
@@ -86,10 +91,10 @@ public class Graph<TVertexProperty, TEdgeProperty>
             return null;
         }
 
-        // Check if the edge exists
+        // Check if the edge between them exists
         Edge<Vertex<TVertexProperty>, TEdgeProperty>? e = HasEdge(source, target);
 
-        // If not, add a new edge
+        // If not, add a new edge between the vertecies
         if (e == null)
         {
             Edge<Vertex<TVertexProperty>, TEdgeProperty> newE = new Edge<
@@ -119,6 +124,7 @@ public class Graph<TVertexProperty, TEdgeProperty>
         }
     }
 
+//check if edge exists
     public Edge<Vertex<TVertexProperty>, TEdgeProperty>? HasEdge(
         Vertex<TVertexProperty>? source,
         Vertex<TVertexProperty>? target

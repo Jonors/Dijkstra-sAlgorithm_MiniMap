@@ -7,6 +7,7 @@ namespace MapLibrary.Core
     //this manager acts as a middle man between the DataStrcuture Library and the UI, so that things dont get mixed up.
     public class MapManager
     {
+        //creating a Graph called MapGraph which will be the map the vertecies will be placed on and used. Defining it to have Specefic MapVertexs and MapEdges which are inheriting from BasicVertex and Edge Properties
         public Graph<MapVertexProperty, MapEdgeProperty> MapGraph { get; private set; }
 
         public MapManager()

@@ -8,7 +8,7 @@ public class Node
     // data
     public int Data;
 
-    // referene
+    // reference
     public Node? Next;
 
     // constructor
