@@ -1,5 +1,6 @@
 namespace Djikstra_s_Algorithm_Minimap.Graph;
 
+//Edge class need to contain Vertexes so it know where it begins and ends, <TVertex>
 public abstract class BasicEdgeProperty<TVertex>
 {
     // Fields
@@ -11,6 +12,7 @@ public abstract class BasicEdgeProperty<TVertex>
 }
 
 public class Edge<TVertex, TEdgeProperty>
+//A TEdgeProperty needs to inherit from BasicEdgeProperty to be the specific Vertex we need. Also it always needs to have a constructor in case we want to create a new one.
     where TEdgeProperty : BasicEdgeProperty<TVertex>, new()
 {
     public TEdgeProperty Property;

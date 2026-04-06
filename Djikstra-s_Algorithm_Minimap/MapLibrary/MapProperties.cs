@@ -18,6 +18,7 @@ namespace MapLibrary.Core
 
         public MapVertexProperty() { }
 
+        //constructor for the PLace/crossing vertecies
         public void Setup(float x, float y, string nodeType, string iconPath = "")
         {
             X = x;
@@ -36,6 +37,7 @@ namespace MapLibrary.Core
     {
         public float Distance { get; set; }
 
+//empty constructor
         public MapEdgeProperty() { }
 
         //using the pythagorean theorem to calculate the distance between two points, giving us the distances needed for Djikstras Algorithm

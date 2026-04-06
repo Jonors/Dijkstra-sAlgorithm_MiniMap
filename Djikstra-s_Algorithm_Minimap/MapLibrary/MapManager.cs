@@ -10,12 +10,13 @@ namespace MapLibrary.Core
         //creating a Graph called MapGraph which will be the map the vertecies will be placed on and used. Defining it to have Specefic MapVertexs and MapEdges which are inheriting from BasicVertex and Edge Properties
         public Graph<MapVertexProperty, MapEdgeProperty> MapGraph { get; private set; }
 
+        //constructor
         public MapManager()
         {
             MapGraph = new Graph<MapVertexProperty, MapEdgeProperty>();
         }
 
-        // Wrapper to add Place or Crossing
+        // Wrapper to make adding a place or crossing to the graph easier and more efficient
         public Vertex<MapVertexProperty> CreateMapNode(string name, float x, float y, string type)
         {
             // Tell the DataStructureLibrary/Graph to create a new blank Vertex with a name
