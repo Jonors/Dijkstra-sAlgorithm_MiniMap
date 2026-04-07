@@ -37,7 +37,7 @@ namespace MapLibrary.Core
     {
         public float Distance { get; set; }
 
-//empty constructor
+        //empty constructor
         public MapEdgeProperty() { }
 
         //using the pythagorean theorem to calculate the distance between two points, giving us the distances needed for Djikstras Algorithm

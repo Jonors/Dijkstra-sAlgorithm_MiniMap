@@ -64,7 +64,7 @@ public class Graph<TVertexProperty, TEdgeProperty>
         }
     }
 
-//check if Vertex exists
+    //check if Vertex exists
     public Vertex<TVertexProperty>? HasVertex(string name)
     {
         foreach (Vertex<TVertexProperty> v in _vertices)
@@ -124,7 +124,7 @@ public class Graph<TVertexProperty, TEdgeProperty>
         }
     }
 
-//check if edge exists
+    //check if edge exists
     public Edge<Vertex<TVertexProperty>, TEdgeProperty>? HasEdge(
         Vertex<TVertexProperty>? source,
         Vertex<TVertexProperty>? target
