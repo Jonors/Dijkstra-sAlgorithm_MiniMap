@@ -13,13 +13,18 @@ namespace MapLibrary.Core
         //creating a Graph called MapGraph which will be the map the vertecies will be placed on and used. Defining it to have Specefic MapVertexs and MapEdges which are inheriting from BasicVertex and Edge Properties
         public Graph<MapVertexProperty, MapEdgeProperty> MapGraph { get; private set; }
 
+        //create two lists containing copies od the created vertexes so the are accessible and modifyable from the manager wihtout ruining the MapGraph itself
+        public List<Vertex<MapVertexProperty>> AllNodes { get; private set; }
+        public List<Edge<Vertex<MapVertexProperty>, MapEdgeProperty>> AllEdges { get; private set; }
+
         //constructor
         public MapManager()
         {
+            // initialising the lists so we can use them
             MapGraph = new Graph<MapVertexProperty, MapEdgeProperty>();
+            AllNodes = new List<Vertex<MapVertexProperty>>();
+            AllEdges = new List<Edge<Vertex<MapVertexProperty>, MapEdgeProperty>>();
         }
-
-        //create two lists containing copies od the created vertexes so the are accessible and modifyable from the manager wihtout ruining the MapGraph itself
 
         // Wrapper to make adding a place or crossing to the graph easier and more efficient
         public Vertex<MapVertexProperty> CreateMapNode(string name, float x, float y, string type)
@@ -34,6 +39,8 @@ namespace MapLibrary.Core
 
             // Inject custom map data into the properties of the new vertex
             vertex.Property.Setup(x, y, type);
+
+            AllNodes.Add(vertex);
 
             return vertex;
         }
@@ -55,6 +62,8 @@ namespace MapLibrary.Core
                     // Calculate the distance so the Algorithm can later use it
                     edge.Property.CalculateDistance();
                 }
+
+                AllEdges.Add(edge);
                 return edge;
             }
             return null;
@@ -73,6 +82,7 @@ namespace MapLibrary.Core
             // using 2 diffrent Dictionary<> to keep track of:
             // the distances between the nodes we travelled across
             var distances = new Dictionary<Vertex<MapVertexProperty>, float>();
+
             // remember which nodes are the ones with the shortest paths between eachother
             var previousNodes =
                 new Dictionary<Vertex<MapVertexProperty>, Vertex<MapVertexProperty>>();
@@ -81,8 +91,7 @@ namespace MapLibrary.Core
             var unvisitedQueue = new PriorityQueue<Vertex<MapVertexProperty>, float>();
 
             // We set the distance of every node in the graph to Infinity because we dont know how far away they are until we have visited them, except the start node which is 0 because we are already on it.
-
-            foreach (var node in VerteciesDistance._vertices) // NOTE: You may need to make _vertices public in the Graph class, or write a GetVertices() method!
+            foreach (var node in AllNodes)
             {
                 distances[node] = float.MaxValue;
             }
@@ -91,7 +100,7 @@ namespace MapLibrary.Core
             // Put the start node into the queue with a priority of 0
             unvisitedQueue.Enqueue(startNode, 0);
 
-            // 4. THE ALGORITHM LOOP
+            // Djikstras Algorithm loop
             while (unvisitedQueue.Count > 0)
             {
                 // STEP A: Dequeue the node with the lowest distance. Let's call it 'currentNode'.
