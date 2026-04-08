@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using System.Xml;
+using System.Dynamic;
 using Djikstra_s_Algorithm_Minimap.Graph;
-using Microsoft.VisualBasic;
 
 namespace MapLibrary.Core
 {
@@ -32,6 +30,7 @@ namespace MapLibrary.Core
             if (x < 0 || y < 0)
             {
                 Console.WriteLine("MapNodes cannot have a negative position value");
+                return null;
             }
 
             // Tell the DataStructureLibrary/Graph to create a new blank Vertex with a name
@@ -79,18 +78,18 @@ namespace MapLibrary.Core
             if (startNode == null || targetNode == null)
                 return new List<Vertex<MapVertexProperty>>();
 
-            // using 2 diffrent Dictionary<> to keep track of:
-            // the distances between the nodes we travelled across
+            //Use two dictionaries tracks the absolute shortest known distance from the startNode to every other node on the map.
+            //One tracks the absolute shortest total distance from the startNode to this specific node,
             var distances = new Dictionary<Vertex<MapVertexProperty>, float>();
 
-            // remember which nodes are the ones with the shortest paths between eachother
+            //and one remembers the nodes which we traveled from so we can later retrace the procedure.
             var previousNodes =
                 new Dictionary<Vertex<MapVertexProperty>, Vertex<MapVertexProperty>>();
 
             // Using a PriorityQueue<> to keep track of unvisited nodes. The first item is the Node. The second item is the Priority (which will be its distance). The queue automatically sorts itself so the smallest distance is always pulled out first.
             var unvisitedQueue = new PriorityQueue<Vertex<MapVertexProperty>, float>();
 
-            // We set the distance of every node in the graph to Infinity because we dont know how far away they are until we have visited them, except the start node which is 0 because we are already on it.
+            // We set the distance of every node in the dictionary to Infinity because we dont know how far away they are until we have visited them, except the start node which is 0 because we are already on it.
             foreach (var node in AllNodes)
             {
                 distances[node] = float.MaxValue;
@@ -103,30 +102,79 @@ namespace MapLibrary.Core
             // Djikstras Algorithm loop
             while (unvisitedQueue.Count > 0)
             {
-                // STEP A: Dequeue the node with the lowest distance. Let's call it 'currentNode'.
-                // Syntax hint: var currentNode = unvisitedQueue.Dequeue();
+                //Dequeue the node with the lowest distance. .
+                var currentNode = unvisitedQueue.Dequeue();
+                //If the currentNode is the same as the targetNode we are trying to get too, we break out of the while loop and end the process
+                if (currentNode == targetNode)
+                {
+                    break;
+                }
 
-                // STEP B: Early Exit Check.
-                // If currentNode == targetNode, you found the destination! 'break' out of the while loop.
+                // Looping through all the edges so we can find what nodes are connected to our current node.
+                foreach (var edge in AllEdges)
+                {
+                    if (edge.Property.Source == currentNode || edge.Property.Target == currentNode)
+                    {
+                        //Creating a temporary box to hold the information of the node at the other end of the edge we are currently looking at.
+                        Vertex<MapVertexProperty> neighbour;
+                        //Check if the currentNode is the starting or end position of the current edge
+                        if (edge.Property.Source == currentNode)
+                        {
+                            neighbour = edge.Property.Target;
+                        }
+                        else
+                        {
+                            neighbour = edge.Property.Source;
+                        }
 
-                // STEP C: Loop through all the edges connected to the currentNode.
-                // (You will need to loop through MapGraph._edges and find the ones where Source or Target is the currentNode)
+                        // Calculate the potentially new(tentative) distance.
+                        float tentativeDistance = distances[currentNode] + edge.Property.Distance;
 
-                // STEP D: Inside the edge loop, find the 'neighbor' node on the other side of the edge.
-                // Calculate the tentative distance: distances[currentNode] + edge.Property.Distance.
+                        // Check the ledger if the route is faster than the previously saved one
+                        if (tentativeDistance < distances[neighbour])
+                        {
+                            // Overwrite the ledger with our new, faster time.
+                            distances[neighbour] = tentativeDistance;
 
-                // STEP E: If this tentative distance is LESS than the neighbor's current recorded distance in distances[neighbor]:
-                //   1. Update distances[neighbor] with the new smaller tentative distance.
-                //   2. Update previousNodes[neighbor] to be the currentNode.
-                //   3. Enqueue the neighbor into the priority queue with its new tentative distance.
+                            //we put our current node inside previous neighbour dictonary so we know where we traveled from and can later recreate our path
+                            previousNodes[neighbour] = currentNode;
+
+                            // Replaceing the current time it takes to get to this neighbour and putting it back in the queue. Because we found a faster way to get to this neighbor, any nodes connected to it might now have a faster route too.
+                            unvisitedQueue.Enqueue(neighbour, tentativeDistance);
+                        }
+                    }
+                }
             }
 
-            // 5. RECONSTRUCT THE PATH
-            // Once the loop breaks, you create a new List<Vertex>.
-            // Start at targetNode, and use the previousNodes dictionary to walk backward to startNode, adding each to the list.
-            // Finally, Reverse() the list so it goes from Start -> End, and return it.
+            // Create the final list to hold our path
+            List<Vertex<MapVertexProperty>> finalPath = new List<Vertex<MapVertexProperty>>();
 
-            return new List<Vertex<MapVertexProperty>>(); // Replace this with your reconstructed path
+            //Create a variable to track where we currently are, starting at the targetNode/endpoint.
+            Vertex<MapVertexProperty>? step = targetNode;
+
+            // Start going backward. Keep looping until our "step" becomes null .
+            while (step != null)
+            {
+                // Add the town we are currently standing in to our path list.
+                finalPath.Add(step);
+
+                // Pull information form dictionary on where we came form to reach this postion
+                if (previousNodes.ContainsKey(step))
+                {
+                    // If yes, move to it
+                    step = previousNodes[step];
+                }
+                else
+                {
+                    // If no, it means we have reached the startNode (which has no previous node).
+                    step = null;
+                }
+            }
+
+            // .Reverse() is a built-in C# method that instantly flips the list,because right now the logic has the path saved back to front
+            finalPath.Reverse();
+
+            return finalPath;
         }
     };
 }

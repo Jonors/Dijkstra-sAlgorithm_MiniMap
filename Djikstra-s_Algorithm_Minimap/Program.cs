@@ -39,12 +39,17 @@ namespace Djikstra_s_Algorithm_Minimap
             ConnectAndPrint(mapManager, "Blacksmith", "Castle");
 
             Console.WriteLine("\nMap generation complete.");
+
+            Console.WriteLine("\nLooking for shorest Path");
+            NavigateAndPrint(mapManager, "Home", "Blacksmith");
+
             //Console.ReadLine(); // Keeps the console window open
         }
 
         // A helper method to connect nodes and format the console output
         static void ConnectAndPrint(MapManager manager, string source, string target)
         {
+            //reuse MapManager so we have access to the created map
             var edge = manager.ConnectNodes(source, target);
 
             //prints each edge so we can see the connections between the places
@@ -64,6 +69,29 @@ namespace Djikstra_s_Algorithm_Minimap
                 //mandatory error message in case something goes wrong
                 Console.WriteLine($"Failed to connect '{source}' and '{target}'.");
             }
+        }
+
+        static void NavigateAndPrint(MapManager manager, string start, string end)
+        {
+            ///reuse MapManager so we have access to the created map
+            var path = manager.FindShortestPath(start, end);
+            string pathString = "";
+
+            // Loop through our path output and pull out just the names
+            for (int i = 0; i < path.Count; i++)
+            {
+                pathString += path[i].Property.Name;
+
+                // Add an arrow between places, but not after the very last place
+                if (i < path.Count - 1)
+                {
+                    pathString += " -> ";
+                }
+            }
+
+            Console.WriteLine(
+                $"\n[DIJKSTRA SUCCESS] The shortest path from '{start}' to '{end}' is: {pathString}"
+            );
         }
     }
 }
