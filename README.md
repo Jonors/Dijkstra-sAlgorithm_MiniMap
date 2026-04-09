@@ -45,10 +45,10 @@ Click 3: Resets the map and sets a new Starting Point.
 Places and crossings can be added in the Program.cs via the setupMap(). Allowing to build a map for game or real place for example.
 
 ## Roadmap 
-Currently Implemented:
-Custom Graph Data Structure (Generics, Inheritance, Polymorphism)
-Dijkstra's Algorithm implementation
-Interactive 2D graphical interface using Raylib
+* Currently Implemented:
+* Custom Graph Data Structure (Generics, Inheritance, Polymorphism)
+* Dijkstra's Algorithm implementation
+* Interactive 2D graphical interface using Raylib
 
 
 ## Contributing 
@@ -64,11 +64,11 @@ jonazeichen@icloud.com
 cc241032@ustp-students.at
 
 ## Acknowledgments
-Dijkstra's Algorithm - Computerphile https://youtu.be/GazC3A4OQTE?si=osmIP8jp8wqYkn2b
-How Dijkstra's Algorithm Works https://youtu.be/EFg3u_E6eHU?si=vVSGYnr_ZnOMqpyn
-Introduction to A* algorithm and pathfinding https://www.redblobgames.com/pathfinding/a-star/introduction.html
-Wikipedia https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
-Microsoft Docs https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.linkedlist-1?view=net-10.0
-Microsoft Docs https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/generics
-Microsoft Docs https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.priorityqueue-2?view=net-10.0
-RayLib Documentation and Git https://github.com/ChrisDill/Raylib-cs
+* Dijkstra's Algorithm - Computerphile https://youtu.be/GazC3A4OQTE?si=osmIP8jp8wqYkn2b
+* How Dijkstra's Algorithm Works https://youtu.be/EFg3u_E6eHU?si=vVSGYnr_ZnOMqpyn
+* Introduction to A* algorithm and pathfinding https://www.redblobgames.com/pathfinding/a-star/introduction.html
+* Wikipedia https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
+* Microsoft Docs https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.linkedlist-1?view=net-10.0
+* Microsoft Docs https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/generics
+* Microsoft Docs https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.priorityqueue-2?view=net-10.0
+* RayLib Documentation and Git https://github.com/ChrisDill/Raylib-cs
