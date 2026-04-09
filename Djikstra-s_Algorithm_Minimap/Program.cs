@@ -29,7 +29,7 @@ namespace Djikstra_s_Algorithm_Minimap
             //loop that displays the map and updates data on it
             while (!Raylib.WindowShouldClose())
             {
-               //clicking logic
+                //clicking logic
                 if (Raylib.IsMouseButtonPressed(MouseButton.Left))
                 {
                     // check mouse position
@@ -48,7 +48,7 @@ namespace Djikstra_s_Algorithm_Minimap
                         if (distanceToMouse < 20)
                         {
                             clickedNode = node;
-                            break; 
+                            break;
                         }
                     }
 
@@ -64,7 +64,10 @@ namespace Djikstra_s_Algorithm_Minimap
                         {
                             // if there is a starting point selected and a second node is clicked that is not the same as the starting point then deteremin it as the end point and claculate the shortest path
                             selectedEnd = clickedNode;
-                            currentPath = mapManager.FindShortestPath(selectedStart.Property.Name, selectedEnd.Property.Name);
+                            currentPath = mapManager.FindShortestPath(
+                                selectedStart.Property.Name,
+                                selectedEnd.Property.Name
+                            );
                         }
                         else
                         {
@@ -76,17 +79,18 @@ namespace Djikstra_s_Algorithm_Minimap
                     }
                 }
 
-
                 //drawing logic
                 Raylib.BeginDrawing();
-                Raylib.ClearBackground(Color.RayWhite); 
+                Raylib.ClearBackground(Color.RayWhite);
 
                 // drawing the default edges/roads first so they sit behind everything else so the later shortest path lies above them
                 foreach (var edge in mapManager.AllEdges)
                 {
                     Raylib.DrawLine(
-                        (int)edge.Property.Source.Property.X, (int)edge.Property.Source.Property.Y,
-                        (int)edge.Property.Target.Property.X, (int)edge.Property.Target.Property.Y,
+                        (int)edge.Property.Source.Property.X,
+                        (int)edge.Property.Source.Property.Y,
+                        (int)edge.Property.Target.Property.X,
+                        (int)edge.Property.Target.Property.Y,
                         Color.LightGray
                     );
                 }
@@ -97,10 +101,16 @@ namespace Djikstra_s_Algorithm_Minimap
                     // Loop through the path list and stop at Count - 1 because we draw a from the current index to the next one. If we donw stop early the prgram will try to connect to a non exisitng node and crash
                     for (int i = 0; i < currentPath.Count - 1; i++)
                     {
-                        Vector2 p1 = new Vector2(currentPath[i].Property.X, currentPath[i].Property.Y);
-                        Vector2 p2 = new Vector2(currentPath[i + 1].Property.X, currentPath[i + 1].Property.Y);
-                        
-                        // DrawLineEx makes the line thicker 
+                        Vector2 p1 = new Vector2(
+                            currentPath[i].Property.X,
+                            currentPath[i].Property.Y
+                        );
+                        Vector2 p2 = new Vector2(
+                            currentPath[i + 1].Property.X,
+                            currentPath[i + 1].Property.Y
+                        );
+
+                        // DrawLineEx makes the line thicker
                         Raylib.DrawLineEx(p1, p2, 5.0f, Color.Green);
                     }
                 }
@@ -109,22 +119,42 @@ namespace Djikstra_s_Algorithm_Minimap
                 foreach (var node in mapManager.AllNodes)
                 {
                     // Default styling based on inheritance Type
-                    Color nodeColor = node.Property.NodeType == "Place" ? Color.Blue : Color.DarkGray;
+                    Color nodeColor =
+                        node.Property.NodeType == "Place" ? Color.Blue : Color.DarkGray;
                     int radius = node.Property.NodeType == "Place" ? 15 : 8;
 
                     // Override colors if they are currently selected by the user
-                    if (node == selectedStart) nodeColor = Color.Green;
-                    if (node == selectedEnd) nodeColor = Color.Red;
+                    if (node == selectedStart)
+                        nodeColor = Color.Green;
+                    if (node == selectedEnd)
+                        nodeColor = Color.Red;
 
                     // Draw the physical circle
-                    Raylib.DrawCircle((int)node.Property.X, (int)node.Property.Y, radius, nodeColor);
-                    
+                    Raylib.DrawCircle(
+                        (int)node.Property.X,
+                        (int)node.Property.Y,
+                        radius,
+                        nodeColor
+                    );
+
                     // Draw the name text hovering slightly above the node
-                    Raylib.DrawText(node.Property.Name, (int)node.Property.X - 15, (int)node.Property.Y - 30, 20, Color.Black);
+                    Raylib.DrawText(
+                        node.Property.Name,
+                        (int)node.Property.X - 15,
+                        (int)node.Property.Y - 30,
+                        20,
+                        Color.Black
+                    );
                 }
 
                 // Draw Instructions at the top left
-                Raylib.DrawText("Click a node to set Start (Green). Click another to set End (Red).", 10, 10, 20, Color.DarkGray);
+                Raylib.DrawText(
+                    "Click a node to set Start (Green). Click another to set End (Red).",
+                    10,
+                    10,
+                    20,
+                    Color.DarkGray
+                );
 
                 Raylib.EndDrawing();
             }
@@ -138,9 +168,9 @@ namespace Djikstra_s_Algorithm_Minimap
             // Giving them specific X/Y coordinates so Pythagorean math has numbers to go off
             // Places
             manager.CreateMapNode("Home", 100, 100, "Place");
-            manager.CreateMapNode("Tavern", 300, 500, "Place");
-            manager.CreateMapNode("Market", 500, 200, "Place");
-            manager.CreateMapNode("Blacksmith", 800, 800, "Place");
+            manager.CreateMapNode("Tavern", 250, 530, "Place");
+            manager.CreateMapNode("Market", 500, 300, "Place");
+            manager.CreateMapNode("Blacksmith", 800, 650, "Place");
             manager.CreateMapNode("Castle", 1000, 500, "Place");
             // Crossings
             manager.CreateMapNode("Crossing_A", 300, 200, "Crossing");
@@ -175,7 +205,9 @@ namespace Djikstra_s_Algorithm_Minimap
                 string sourceName = edge.Property.Source.Property.Name;
                 string targetName = edge.Property.Target.Property.Name;
                 float distance = edge.Property.Distance;
-                Console.WriteLine($"'{sourceName}' is connected to '{targetName}' with a distance of {distance:F2}");
+                Console.WriteLine(
+                    $"'{sourceName}' is connected to '{targetName}' with a distance of {distance:F2}"
+                );
             }
             else
             {
