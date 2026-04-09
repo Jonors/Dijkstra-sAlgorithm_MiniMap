@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Numerics; // Required for Raylib Vectors
+using Djikstra_s_Algorithm_Minimap.Graph;
 using MapLibrary.Core;
+using Raylib_cs;
 
 namespace Djikstra_s_Algorithm_Minimap
 {
@@ -10,88 +14,173 @@ namespace Djikstra_s_Algorithm_Minimap
             // Instantiate the MapManager
             MapManager mapManager = new MapManager();
 
-            // Giving them specific X/Y coordinates so the Pythagorean math has real numbers to calculate
-            // Places/Destinations
-            mapManager.CreateMapNode("Home", 10, 10, "Place");
-            mapManager.CreateMapNode("Tavern", 30, 50, "Place");
-            mapManager.CreateMapNode("Market", 50, 20, "Place");
-            mapManager.CreateMapNode("Blacksmith", 80, 80, "Place");
-            mapManager.CreateMapNode("Castle", 100, 50, "Place");
+            //setting up the map with access to the mapManager
+            SetupMap(mapManager);
+
+            // Using Raylib to create a window for the map to visualise the paths between the places
+            Raylib.InitWindow(1200, 800, "Djikstra Minimap");
+            Raylib.SetTargetFPS(60);
+
+            // Variables to track user clicks
+            Vertex<MapVertexProperty> selectedStart = null;
+            Vertex<MapVertexProperty> selectedEnd = null;
+            List<Vertex<MapVertexProperty>> currentPath = new List<Vertex<MapVertexProperty>>();
+
+            //loop that displays the map and updates data on it
+            while (!Raylib.WindowShouldClose())
+            {
+               //clicking logic
+                if (Raylib.IsMouseButtonPressed(MouseButton.Left))
+                {
+                    // check mouse position
+                    Vector2 mousePos = Raylib.GetMousePosition();
+                    Vertex<MapVertexProperty> clickedNode = null;
+
+                    // check if a node is close to the mouse position
+                    foreach (var node in mapManager.AllNodes)
+                    {
+                        // pythagorean theorem to find distance between mouse and node
+                        float dx = mousePos.X - node.Property.X;
+                        float dy = mousePos.Y - node.Property.Y;
+                        float distanceToMouse = (float)Math.Sqrt(dx * dx + dy * dy);
+
+                        // if the mouse is within 20 pixels of the node's center mark it as clicked
+                        if (distanceToMouse < 20)
+                        {
+                            clickedNode = node;
+                            break; 
+                        }
+                    }
+
+                    // if a node is clicked the selection needs to be ugraded. Depending on what click is made the selction updates differently so we have a simple click navigation.
+                    if (clickedNode != null)
+                    {
+                        if (selectedStart == null)
+                        {
+                            // If no start point is selected we determin the first clicked node as the starting point
+                            selectedStart = clickedNode;
+                        }
+                        else if (selectedEnd == null && clickedNode != selectedStart)
+                        {
+                            // if there is a starting point selected and a second node is clicked that is not the same as the starting point then deteremin it as the end point and claculate the shortest path
+                            selectedEnd = clickedNode;
+                            currentPath = mapManager.FindShortestPath(selectedStart.Property.Name, selectedEnd.Property.Name);
+                        }
+                        else
+                        {
+                            //if both poiont are selected and a click is made on a new node we determine that as the new start point, remove the end point and clear the drawn path
+                            selectedStart = clickedNode;
+                            selectedEnd = null;
+                            currentPath.Clear();
+                        }
+                    }
+                }
+
+
+                //drawing logic
+                Raylib.BeginDrawing();
+                Raylib.ClearBackground(Color.RayWhite); 
+
+                // drawing the default edges/roads first so they sit behind everything else so the later shortest path lies above them
+                foreach (var edge in mapManager.AllEdges)
+                {
+                    Raylib.DrawLine(
+                        (int)edge.Property.Source.Property.X, (int)edge.Property.Source.Property.Y,
+                        (int)edge.Property.Target.Property.X, (int)edge.Property.Target.Property.Y,
+                        Color.LightGray
+                    );
+                }
+
+                // drawing the path Djikstras Algorihtm found over the esxisting edges
+                if (currentPath.Count > 1)
+                {
+                    // Loop through the path list and stop at Count - 1 because we draw a from the current index to the next one. If we donw stop early the prgram will try to connect to a non exisitng node and crash
+                    for (int i = 0; i < currentPath.Count - 1; i++)
+                    {
+                        Vector2 p1 = new Vector2(currentPath[i].Property.X, currentPath[i].Property.Y);
+                        Vector2 p2 = new Vector2(currentPath[i + 1].Property.X, currentPath[i + 1].Property.Y);
+                        
+                        // DrawLineEx makes the line thicker 
+                        Raylib.DrawLineEx(p1, p2, 5.0f, Color.Green);
+                    }
+                }
+
+                // Draw the nodes (Places and Crossings)  on top of everything so it looks nice and clean
+                foreach (var node in mapManager.AllNodes)
+                {
+                    // Default styling based on inheritance Type
+                    Color nodeColor = node.Property.NodeType == "Place" ? Color.Blue : Color.DarkGray;
+                    int radius = node.Property.NodeType == "Place" ? 15 : 8;
+
+                    // Override colors if they are currently selected by the user
+                    if (node == selectedStart) nodeColor = Color.Green;
+                    if (node == selectedEnd) nodeColor = Color.Red;
+
+                    // Draw the physical circle
+                    Raylib.DrawCircle((int)node.Property.X, (int)node.Property.Y, radius, nodeColor);
+                    
+                    // Draw the name text hovering slightly above the node
+                    Raylib.DrawText(node.Property.Name, (int)node.Property.X - 15, (int)node.Property.Y - 30, 20, Color.Black);
+                }
+
+                // Draw Instructions at the top left
+                Raylib.DrawText("Click a node to set Start (Green). Click another to set End (Red).", 10, 10, 20, Color.DarkGray);
+
+                Raylib.EndDrawing();
+            }
+
+            // Cleanup when window closes
+            Raylib.CloseWindow();
+        }
+
+        static void SetupMap(MapManager manager)
+        {
+            // Giving them specific X/Y coordinates so Pythagorean math has numbers to go off
+            // Places
+            manager.CreateMapNode("Home", 100, 100, "Place");
+            manager.CreateMapNode("Tavern", 300, 500, "Place");
+            manager.CreateMapNode("Market", 500, 200, "Place");
+            manager.CreateMapNode("Blacksmith", 800, 800, "Place");
+            manager.CreateMapNode("Castle", 1000, 500, "Place");
             // Crossings
-            mapManager.CreateMapNode("Crossing_A", 30, 20, "Crossing");
-            mapManager.CreateMapNode("Crossing_B", 50, 50, "Crossing");
-            mapManager.CreateMapNode("Crossing_C", 80, 20, "Crossing");
+            manager.CreateMapNode("Crossing_A", 300, 200, "Crossing");
+            manager.CreateMapNode("Crossing_B", 500, 500, "Crossing");
+            manager.CreateMapNode("Crossing_C", 800, 200, "Crossing");
 
             Console.WriteLine("\nconnecting nodes ...");
 
-            // We use a helper method below to keep the Main method clean
-            ConnectAndPrint(mapManager, "Home", "Crossing_A");
-            ConnectAndPrint(mapManager, "Crossing_A", "Tavern");
-            ConnectAndPrint(mapManager, "Crossing_A", "Market");
+            ConnectAndPrint(manager, "Home", "Crossing_A");
+            ConnectAndPrint(manager, "Crossing_A", "Tavern");
+            ConnectAndPrint(manager, "Crossing_A", "Market");
 
-            ConnectAndPrint(mapManager, "Tavern", "Crossing_B");
-            ConnectAndPrint(mapManager, "Market", "Crossing_B");
+            ConnectAndPrint(manager, "Tavern", "Crossing_B");
+            ConnectAndPrint(manager, "Market", "Crossing_B");
 
-            ConnectAndPrint(mapManager, "Market", "Crossing_C");
-            ConnectAndPrint(mapManager, "Crossing_C", "Blacksmith");
-            ConnectAndPrint(mapManager, "Crossing_B", "Blacksmith");
+            ConnectAndPrint(manager, "Market", "Crossing_C");
+            ConnectAndPrint(manager, "Crossing_C", "Blacksmith");
+            ConnectAndPrint(manager, "Crossing_B", "Blacksmith");
 
-            ConnectAndPrint(mapManager, "Blacksmith", "Castle");
+            ConnectAndPrint(manager, "Blacksmith", "Castle");
 
             Console.WriteLine("\nMap generation complete.");
-
-            Console.WriteLine("\nLooking for shorest Path");
-            NavigateAndPrint(mapManager, "Home", "Blacksmith");
-
-            //Console.ReadLine(); // Keeps the console window open
         }
 
-        // A helper method to connect nodes and format the console output
+        // A helper methods to connect nodes, check their distaces and format the console output
         static void ConnectAndPrint(MapManager manager, string source, string target)
         {
-            //reuse MapManager so we have access to the created map
             var edge = manager.ConnectNodes(source, target);
 
-            //prints each edge so we can see the connections between the places
             if (edge != null && edge.Property.Source != null && edge.Property.Target != null)
             {
                 string sourceName = edge.Property.Source.Property.Name;
                 string targetName = edge.Property.Target.Property.Name;
-
-                // :F2 formats the float to exactly 2 decimal places so it looks clean when printed
                 float distance = edge.Property.Distance;
-                Console.WriteLine(
-                    $"'{sourceName}' is connected to '{targetName}' with a distance of {distance:F2}"
-                );
+                Console.WriteLine($"'{sourceName}' is connected to '{targetName}' with a distance of {distance:F2}");
             }
             else
             {
-                //mandatory error message in case something goes wrong
                 Console.WriteLine($"Failed to connect '{source}' and '{target}'.");
             }
-        }
-
-        static void NavigateAndPrint(MapManager manager, string start, string end)
-        {
-            ///reuse MapManager so we have access to the created map
-            var path = manager.FindShortestPath(start, end);
-            string pathString = "";
-
-            // Loop through our path output and pull out just the names
-            for (int i = 0; i < path.Count; i++)
-            {
-                pathString += path[i].Property.Name;
-
-                // Add an arrow between places, but not after the very last place
-                if (i < path.Count - 1)
-                {
-                    pathString += " -> ";
-                }
-            }
-
-            Console.WriteLine(
-                $"\n[DIJKSTRA SUCCESS] The shortest path from '{start}' to '{end}' is: {pathString}"
-            );
         }
     }
 }
