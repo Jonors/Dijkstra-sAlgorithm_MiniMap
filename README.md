@@ -14,9 +14,9 @@ To run this project .NET SDK has to be installed on the machine. It can be downl
 * [.NET SDK Download](https://dotnet.microsoft.com/download)
 ### Installation
 1. Clone the repository to your local machine:
-   ```Bash
-   git clone [https://github.com/your_username_/Project-Name.git](https://github.com/your_username_/Project-Name.git)
-   ```
+```Bash
+git clone [https://github.com/your_username_/Project-Name.git](https://github.com/your_username_/Project-Name.git)
+```
 
 2. Navigate into the project directory:
 ```Bash
