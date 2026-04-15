@@ -1,0 +1,15 @@
+@startuml
+class MapManager {
+    + MapManager()
+    + CreateMapNode(name:string, x:float, y:float, type:string) : Vertex<MapVertexProperty>
+    + ConnectNodes(sourceName:string, targetName:string) : Edge<Vertex<MapVertexProperty>, MapEdgeProperty>
+    + FindShortestPath(startName:string, endName:string) : List<Vertex<MapVertexProperty>>
+}
+class "Graph`2"<T1,T2> {
+}
+class "List`1"<T> {
+}
+MapManager --> "MapGraph<MapVertexProperty,MapEdgeProperty>" "Graph`2"
+MapManager --> "AllNodes<Vertex<MapVertexProperty>>" "List`1"
+MapManager --> "AllEdges<Edge<Vertex<MapVertexProperty>, MapEdgeProperty>>" "List`1"
+@enduml

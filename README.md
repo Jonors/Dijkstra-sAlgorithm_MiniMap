@@ -13,9 +13,10 @@ This Application was built as the Final Project for my C# class at USTP. Each st
 To run this project .NET SDK has to be installed on the machine. It can be download from the official Microsoft website:
 * [.NET SDK Download](https://dotnet.microsoft.com/download)
 ### Installation
+
 1. Clone the repository to your local machine:
 ```Bash
-git clone [https://github.com/your_username_/Project-Name.git](https://github.com/your_username_/Project-Name.git)
+git clone [https://github.com/Jonors/Dijkstra-sAlgorithm_MiniMap.git](https://github.com/Jonors/Dijkstra-sAlgorithm_MiniMap.git)
 ```
 
 2. Navigate into the project directory:
@@ -23,12 +24,12 @@ git clone [https://github.com/your_username_/Project-Name.git](https://github.co
 cd Dijkstra-s_Algorithm_MiniMap
 ```
 
-3. Install the required Raylib-cs package:
+1. Install the required Raylib-cs package:
 ```Bash
 dotnet add package Raylib-cs
 ```
 
-4. Run the application:
+1. Run the application:
 ```Bash
 dotnet run
 ```
@@ -60,8 +61,8 @@ None
 
 ## Contact
 
-jonazeichen@icloud.com
-cc241032@ustp-students.at
+Private: jonazeichen@icloud.com
+University: cc241032@ustp-students.at
 
 ## Acknowledgments
 * Dijkstra's Algorithm - Computerphile https://youtu.be/GazC3A4OQTE?si=osmIP8jp8wqYkn2b

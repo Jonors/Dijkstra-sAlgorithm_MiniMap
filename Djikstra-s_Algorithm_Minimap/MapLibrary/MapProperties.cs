@@ -3,32 +3,24 @@ using Djikstra_s_Algorithm_Minimap.Graph;
 
 namespace MapLibrary.Core
 {
-    // Defining what a node (place or crossing) holds using the BasicerexProperty
+    // Defining what a node (place or crossing) holds using the BasicVertexProperty
     public class MapVertexProperty : BasicVertexProperty
     {
         //adding x and y so we have a position for the MapVertex
         public float X { get; set; }
         public float Y { get; set; }
 
-        //add a NodeType so we can lateron declare if the MapVeretx is either a clickable place or a road crossing
+        //add a NodeType so we can lateron declare if the MapVeretx is either a place or a road crossing
         public string NodeType { get; set; }
-
-        //Depending on the type the Nodes will be marked with a house or nothing
-        public string IconPath { get; set; }
 
         public MapVertexProperty() { }
 
         //constructor for the PLace/crossing vertecies
-        public void Setup(float x, float y, string nodeType, string iconPath = "")
+        public void Setup(float x, float y, string nodeType)
         {
             X = x;
             Y = y;
             NodeType = nodeType;
-            // If it is a place, it has an icon displaying a house
-            IconPath =
-                nodeType == "Place" && string.IsNullOrEmpty(iconPath)
-                    ? "../assets/house.png"
-                    : iconPath;
         }
     }
 

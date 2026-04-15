@@ -1,0 +1,12 @@
+@startuml
+abstract class "BasicEdgeProperty`1"<TVertex> {
+    + Id : uint
+    + Source : TVertex?
+    + Target : TVertex?
+}
+class "Edge`2"<TVertex,TEdgeProperty> {
+    + Property : TEdgeProperty
+    + Edge(source:TVertex, target:TVertex)
+    + <<override>> ToString() : string
+}
+@enduml

@@ -1,0 +1,19 @@
+@startuml
+class MapVertexProperty {
+    + X : float <<get>> <<set>>
+    + Y : float <<get>> <<set>>
+    + NodeType : string <<get>> <<set>>
+    + IconPath : string <<get>> <<set>>
+    + MapVertexProperty()
+    + Setup(x:float, y:float, nodeType:string, iconPath:string) : void
+}
+class MapEdgeProperty {
+    + Distance : float <<get>> <<set>>
+    + MapEdgeProperty()
+    + CalculateDistance() : void
+}
+class "BasicEdgeProperty`1"<T> {
+}
+BasicVertexProperty <|-- MapVertexProperty
+"BasicEdgeProperty`1" "<Vertex<MapVertexProperty>>" <|-- MapEdgeProperty
+@enduml

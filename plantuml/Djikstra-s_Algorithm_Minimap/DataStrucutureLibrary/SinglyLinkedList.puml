@@ -1,0 +1,15 @@
+@startuml
+class Node {
+    + Data : int
+    + Next : Node?
+    + Node(d:int)
+}
+class SinglyLinkedList {
+    + InsertFront(newData:int) : void
+    + InsertLast(newData:int) : void
+    + GetLastNode() : Node?
+    + InsertAfter(prev:Node?, newData:int) : void
+    + DeleteNodebyKey(key:int) : void
+    + PrintList() : void
+}
+@enduml

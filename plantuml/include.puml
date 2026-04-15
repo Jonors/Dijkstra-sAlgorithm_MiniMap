@@ -1,0 +1,12 @@
+@startuml
+!include ./Djikstra-s_Algorithm_Minimap/Program.puml
+!include ./Djikstra-s_Algorithm_Minimap/MapLibrary/MapProperties.puml
+!include ./Djikstra-s_Algorithm_Minimap/MapLibrary/MapManager.puml
+!include ./Djikstra-s_Algorithm_Minimap/DataStrucutureLibrary/Graph.puml
+!include ./Djikstra-s_Algorithm_Minimap/DataStrucutureLibrary/Vertex.puml
+!include ./Djikstra-s_Algorithm_Minimap/DataStrucutureLibrary/Edge.puml
+!include ./Djikstra-s_Algorithm_Minimap/DataStrucutureLibrary/SinglyLinkedList.puml
+!include ./Djikstra-s_Algorithm_Minimap/obj/Debug/net10.0/Djikstra-s_Algorithm_Minimap.AssemblyInfo.puml
+!include ./Djikstra-s_Algorithm_Minimap/obj/Debug/net10.0/.NETCoreApp,Version=v10.0.AssemblyAttributes.puml
+!include ./Djikstra-s_Algorithm_Minimap/obj/Debug/net10.0/Djikstra-s_Algorithm_Minimap.GlobalUsings.g.puml
+@enduml

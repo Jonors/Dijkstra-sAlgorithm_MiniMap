@@ -1,0 +1,14 @@
+@startuml
+class "Graph`2"<TVertexProperty,TEdgeProperty> {
+    + Graph()
+    + AddVertex(name:string) : Vertex<TVertexProperty>
+    + RemoveVertex(name:string) : void
+    + HasVertex(name:string) : Vertex<TVertexProperty>?
+    + AddEdge(source:Vertex<TVertexProperty>?, target:Vertex<TVertexProperty>?) : Edge<Vertex<TVertexProperty>, TEdgeProperty>?
+    + RemoveEdge(source:Vertex<TVertexProperty>?, target:Vertex<TVertexProperty>?) : void
+    + HasEdge(source:Vertex<TVertexProperty>?, target:Vertex<TVertexProperty>?) : Edge<Vertex<TVertexProperty>, TEdgeProperty>?
+    + PrintGraph() : void
+}
+class "BasicEdgeProperty`1"<T> {
+}
+@enduml

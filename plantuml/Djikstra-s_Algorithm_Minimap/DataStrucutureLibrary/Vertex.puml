@@ -1,0 +1,11 @@
+@startuml
+abstract class BasicVertexProperty {
+    + Id : uint
+    + Name : string = "UnknownName"
+}
+class "Vertex`1"<TVertexProperty> {
+    + Property : TVertexProperty
+    + Vertex(name:string)
+    + <<override>> ToString() : string
+}
+@enduml
